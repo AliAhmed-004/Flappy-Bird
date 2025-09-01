@@ -11,6 +11,9 @@ class Pipe extends SpriteComponent
   // determines if the pipe is top or bottom
   bool isTopPipe;
 
+  // check if scored
+  bool scored = false;
+
   Pipe(Vector2 position, Vector2 size, {required this.isTopPipe})
     : super(position: position, size: size);
 
@@ -29,6 +32,16 @@ class Pipe extends SpriteComponent
   void update(double dt) {
     // scroll the pipe left
     position.x -= groundScrollSpeed * dt;
+
+    // increment score if top pipe moves behind bird
+    if (!scored && position.x + size.x < game.bird.size.x) {
+      scored = true;
+
+      // only increment for one pipe to avoid double increments
+      if (isTopPipe) {
+        game.incrementScore();
+      }
+    }
 
     // remove pipe if it goes off screen
     if (size.x + position.x / 2 <= 0) {

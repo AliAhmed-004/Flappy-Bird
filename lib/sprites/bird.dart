@@ -34,6 +34,12 @@ class Bird extends SpriteComponent with CollisionCallbacks {
 
     // Update bird's position based on velocity
     position.y += velocity * dt;
+
+    // Prevent bird from going above screen
+    if (position.y < 0) {
+      position.y = 0;
+      velocity = 0;
+    }
   }
 
   // FLAP -> what happens after screen tap
