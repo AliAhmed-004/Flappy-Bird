@@ -4,6 +4,8 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flappy_bird/sprites/background.dart';
 import 'package:flappy_bird/sprites/ground.dart';
+import 'package:flappy_bird/sprites/pipe/pipe.dart';
+import 'package:flappy_bird/sprites/pipe/pipe_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'sprites/bird.dart';
@@ -17,6 +19,7 @@ class FlappyBirdGame extends FlameGame with TapDetector, HasCollisionDetection {
   late Bird bird;
   late Background background;
   late Ground ground;
+  late PipeManager pipeManager;
 
   // ON LOAD -> called when the game is loaded
   @override
@@ -28,6 +31,10 @@ class FlappyBirdGame extends FlameGame with TapDetector, HasCollisionDetection {
     // add ground
     ground = Ground();
     add(ground);
+
+    // add pipe manager
+    pipeManager = PipeManager();
+    add(pipeManager);
 
     // add bird sprite
     bird = Bird();
@@ -51,6 +58,7 @@ class FlappyBirdGame extends FlameGame with TapDetector, HasCollisionDetection {
     pauseEngine();
 
     showDialog(
+      barrierDismissible: false,
       context: buildContext!,
       builder: (buildContext) => AlertDialog(
         content: Text("Game Over"),
@@ -71,6 +79,8 @@ class FlappyBirdGame extends FlameGame with TapDetector, HasCollisionDetection {
     Navigator.pop(buildContext!);
 
     bird.reset();
+    // Reset all Pipes
+    children.whereType<Pipe>().forEach((pipe) => pipe.removeFromParent());
     isGameOver = false;
     resumeEngine();
   }
