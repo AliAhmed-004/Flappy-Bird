@@ -93,6 +93,9 @@ class FlappyBirdGame extends FlameGame with TapDetector, HasCollisionDetection {
     // close the dialog
     Navigator.pop(buildContext!);
 
+    // Reset the score
+    score = 0;
+
     bird.reset();
     // Reset all Pipes
     children.whereType<Pipe>().forEach((pipe) => pipe.removeFromParent());
